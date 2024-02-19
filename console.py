@@ -144,9 +144,7 @@ class HBNBCommand(cmd.Cmd):
             finally:
                 class_options[key] = value
         new_instance = HBNBCommand.classes[class_name]()
-        print(class_options)
         new_instance.__dict__.update(class_options)
-        print(new_instance.__dict__)
         storage.save()
         print(new_instance.id)
         storage.save()
