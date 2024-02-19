@@ -131,18 +131,24 @@ class HBNBCommand(cmd.Cmd):
         for arg in options:
             try:
                 key, value = arg.split('=')
-                if value.isdigit():
+                if value.isdigit() or re.match(r'^-\d+$', value):
                     value = int(value)
-                elif re.match(r'^\d+\.\d+$', value):
+                    class_options[key] = value
+                elif re.match(r'^\d+\.\d+$', value) or re.match(r'^-\d+\.\d+', value):
                     value = float(value)
-                else:
+                    class_options[key] = value
+                elif re.search(r'^[\[\{]+.*[\]\}]$', value):
+                    pass
+                elif isinstance(value, str):
                     value = re.sub("_", " ", value)
                     value = value.strip('\'"')
-                    value = re.sub(r'"', '\\"', value)
-            except indexError:
+                    if re.search(r'^[\[\{]+.*[\]\}]$', value):
+                        pass
+                    else:
+                        value = re.sub(r'"', '\\"', value)
+                        class_options[key] = value
+            except IndexError:
                 pass
-            finally:
-                class_options[key] = value
         new_instance = HBNBCommand.classes[class_name]()
         new_instance.__dict__.update(class_options)
         storage.save()
