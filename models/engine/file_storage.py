@@ -1,6 +1,12 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
+from ..amenity import Amenity
+from ..city import City
+from ..place import Place
+from ..review import Review
+from ..state import State
+from ..user import User
 
 
 class FileStorage:
@@ -8,23 +14,35 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
+    def class_dict(self):
+        """Returns a dictionary of classes"""
+        return {
+                'Amenity': Amenity, 'City': City, 'Place': Place,
+                'Review': Review, 'State': State, 'User': User
+               }
+
+    # @classmethod
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls:
-            result = []
-            filter_key = cls.to_dict()['__class__']
-            for key in FileStorage.__objects.keys():
-                class_name, id = key.split('.')
-                if class_name == filter_key:
-                    result.append(key)
+            if cls in self.class_dict():
+                result = []
+                for key, val in FileStorage.__objects.items():
+                    key = key.split('.')
+                    if key[0] == cls:
+                        result.append(val)
+                return result
 
         return FileStorage.__objects
 
     def delete(self, obj=None):
         if obj:
-            key = obj.__class__.__name__ + '.' + obj.id
-            if key in FileStorage.__objects:
+            class_name = str(type(obj)).split('.')[-1].split('\'')[0]
+            if class_name in self.class_dict():
+                key = class_name + '.' + obj.id
                 del FileStorage.__objects[key]
+            FileStorage.save(self)
+
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
