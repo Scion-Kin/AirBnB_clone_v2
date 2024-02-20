@@ -134,7 +134,8 @@ class HBNBCommand(cmd.Cmd):
                 if value.isdigit() or re.match(r'^-\d+$', value):
                     value = int(value)
                     class_options[key] = value
-                elif re.match(r'^\d+\.\d+$', value) or re.match(r'^-\d+\.\d+', value):
+                elif re.match(r'^\d+\.\d+$', value) or \
+                        re.match(r'^-\d+\.\d+', value):
                     value = float(value)
                     class_options[key] = value
                 elif re.search(r'^[\[\{]+.*[\]\}]$', value):
