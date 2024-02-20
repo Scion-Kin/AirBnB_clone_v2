@@ -8,19 +8,6 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def class_dict(self):
-        """Returns a dictionary of classes"""
-        from ..amenity import Amenity
-        from ..city import City
-        from ..place import Place
-        from ..review import Review
-        from ..state import State
-        from ..user import User
-        return {
-                'Amenity': Amenity, 'City': City, 'Place': Place,
-                'Review': Review, 'State': State, 'User': User
-               }
-
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls:
@@ -34,12 +21,12 @@ class FileStorage:
         return FileStorage.__objects
 
     def delete(self, obj=None):
+        """Deletes obj from __objects if it's inside"""
         if obj:
             class_name = str(type(obj)).split('.')[-1].split('\'')[0]
-            if class_name in self.class_dict():
-                key = class_name + '.' + obj.id
-                if key in FileStorage.__objects:
-                    del FileStorage.__objects[key]
+            key = class_name + '.' + obj.id
+            if key in FileStorage.__objects:
+                del FileStorage.__objects[key]
             FileStorage.save(self)
 
     def new(self, obj):
