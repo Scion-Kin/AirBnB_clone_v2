@@ -38,7 +38,8 @@ class FileStorage:
             class_name = str(type(obj)).split('.')[-1].split('\'')[0]
             if class_name in self.class_dict():
                 key = class_name + '.' + obj.id
-                del FileStorage.__objects[key]
+                if key in FileStorage.__objects:
+                    del FileStorage.__objects[key]
             FileStorage.save(self)
 
     def new(self, obj):
