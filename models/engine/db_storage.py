@@ -3,16 +3,8 @@
 
 import os
 import sqlalchemy
-from sqlalchemy import create_engine, MetaData, URL
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-from ..base_model import Base
-from ..amenity import Amenity
-from ..city import City
-from ..place import Place
-from ..user import User
-from ..review import Review
-from .. state import State
 
 
 class DBStorage:
@@ -25,21 +17,23 @@ class DBStorage:
         host = os.getenv("HBNB_MYSQL_HOST")
         db = os.getenv("HBNB_MYSQL_DB")
         env = os.getenv("HBNB_ENV")
-        url_object = URL.create(
-            "mysql+mysqldb",
-            username=user,
-            password=pwd,
-            host=host,
-            database=db,
-            query={"charset": "utf8"}
-        )
-        self.__engine = create_engine(url_object, pool_pre_ping=True)
+        data = "{}:{}@{}/{}".format(user, pwd, host, db)
+        self.__engine = create_engine(data, pool_pre_ping=True)
         metadata = MetaData(bind=self.__engine)
         if env == "test" or "Test":
             metadata.drop_all()
 
     def all(self, cls=None):
         """ retrieves data based on the class name"""
+
+        from ..base_model import Base
+        from ..amenity import Amenity
+        from ..city import City
+        from ..place import Place
+        from ..user import User
+        from ..review import Review
+        from .. state import State
+
         session = self.__session
         return_obj = {}
         if cls:
