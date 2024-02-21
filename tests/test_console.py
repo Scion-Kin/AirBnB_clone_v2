@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+""" test the console files """
 from console import HBNBCommand
 from models.engine.file_storage import FileStorage
 
