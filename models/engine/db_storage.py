@@ -34,15 +34,16 @@ class DBStorage:
             query={"charset": "utf8"}
         )
         self.__engine = create_engine(url_object, pool_pre_ping=True)
+        metadata = MetaData(bind=self.__engine)
         if env == "test" or "Test":
-            MetaData.drop_all()
+            metadata.drop_all()
 
     def all(self, cls=None):
         """ retrieves data based on the class name"""
         session = self.__session
         return_obj = {}
         if cls:
-            classes = ["User", "Place", "Review", "Amenity", "State", "City"]
+            classes = [User, Place, Review, Amenity, State, City]
             class_name = str(type(cls).split('.')[-1].split('\'')[0])
             if class_name in classes:
                 result = session.query(cls).all()
