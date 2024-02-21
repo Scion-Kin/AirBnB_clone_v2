@@ -1,33 +1,60 @@
-import unittest
 from console import HBNBCommand
+from models.engine.file_storage import FileStorage
 
-class test_console(unittest.TestCase):
+import unittest
 
-    def setUp(self):
-        self.new_instance = HBNBCommand()
+class TestConsole(unittest.TestCase):
+	""" test the console files """
 
-    def test_float(self):
-        options = {"height": "123.4"}
-        self.new_instance.create("State")
-        self.new_instance.__dict__.update(options)
-        self.assertIsInstance(self.new_instance.__dict__["height"], float)
+	def setUp(self):
+		self.instance = HBNBCommand()
+		self.storage = FileStorage()
+		# self.base = BaseModel()
 
-    def test_negative_float(self):
-        options = {"balance": "-123.4"}
-        self.new_instance.create("User")
-        self.new_instance.__dict__.update(options)
-        self.assertIsInstance(self.new_instance.__dict__["balance"], float)
+	def test_create_with_underscores(self):
+		""" test do create with params """
+		self.instance.do_create("State name='Ekiti_state'")
+		result = (self.storage.all())
+		for k, v in result.items():
+			result = v.to_dict()
+		self.assertEqual(result["name"], "Ekiti state")
 
-    def test_int(self):
-        options = {"population": "12312233"}
-        self.new_instance.create("State")
-        self.new_instance.__dict__.update(options)
-        self.assertIsInstance(self.new_instance.__dict__["population"], int)
+	def test_integer(self):
+		""" test do create with params """
+		self.instance.do_create("State population=233200302")
+		result = (self.storage.all())
+		for k, v in result.items():
+			result = v.to_dict()
+		self.assertTrue(result["population"], int)
 
-    def test_negative_int(self):
-        options = {"rating": "-3"}
-        self.new_instance.create("Review")
-        self.new_instance.__dict__.update(options)
-        self.assertIsInstance(self.new_instance.__dict__["rating"], int)
+	def test_negative_integer(self):
+		""" test do create with params """
+		self.instance.do_create("State population=-233200302")
+		result = (self.storage.all())
+		for k, v in result.items():
+			result = v.to_dict()
+		self.assertTrue(result["population"], int)
 
+	def test_negative_float(self):
+		""" test do create with params """
+		self.instance.do_create("State population=-233.200302")
+		result = (self.storage.all())
+		for k, v in result.items():
+			result = v.to_dict()
+		self.assertTrue(result["population"], float)
 
+	def test_float(self):
+		""" test do create with params """
+		self.instance.do_create("State population=233.200302")
+		result = (self.storage.all())
+		for k, v in result.items():
+			result = v.to_dict()
+		self.assertTrue(result["population"], float)
+
+	def test_negative_float(self):
+		""" test do create with params """
+		self.instance.do_create('State resort_center=king"s')
+		result = (self.storage.all())
+		for k, v in result.items():
+			result = v.to_dict()
+		self.assertTrue(result["resort_center"], "king\"s")

@@ -1,10 +1,8 @@
 #!/usr/bin/python3
-
 """ Console Module """
 import cmd
 import sys
 import re
-import json
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -118,43 +116,40 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        args = args.split(" ")
-        class_name = args[0]
-        options = args[1:]
-        class_options = {}
         if not args:
             print("** class name missing **")
             return
-        elif class_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        for arg in options:
-            try:
-                key, value = arg.split('=')
-                if value.isdigit() or re.match(r'^-\d+$', value):
-                    value = int(value)
-                    class_options[key] = value
-                elif re.match(r'^\d+\.\d+$', value) or \
-                        re.match(r'^-\d+\.\d+', value):
-                    value = float(value)
-                    class_options[key] = value
-                elif re.search(r'^[\[\{]+.*[\]\}]$', value):
-                    pass
-                elif isinstance(value, str):
-                    value = re.sub("_", " ", value)
-                    value = value.strip('\'"')
-                    if re.search(r'^[\[\{]+.*[\]\}]$', value):
-                        pass
+        if args:
+            args = args.split(" ")
+            class_name = args[0]
+            params_dict = {}
+            params = args[1:]
+            if class_name in HBNBCommand.classes:
+                new_instance = HBNBCommand.classes[class_name]()
+                for param in params:
+                    param_key, param_value = param.split("=")
+                    if param_value.isdigit() or \
+                            re.match(r'-?\d+$', param_value):
+                        param_value = int(param_value)
+                        params_dict.update({param_key: param_value})
+                    elif re.search(r'-?\d+\.\d+', param_value):
+                        param_value = float(param_value)
+                        params_dict.update({param_key: param_value})
                     else:
-                        value = re.sub(r'"', '\\"', value)
-                        class_options[key] = value
-            except IndexError:
-                pass
-        new_instance = HBNBCommand.classes[class_name]()
-        new_instance.__dict__.update(class_options)
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+                        param_value = re.sub('_', " ", param_value)
+                        param_value = param_value.strip('"\'')
+                        param_value = re.sub(r'"', '\\"', param_value)
+                        if re.match(r'^[\[\{].+[\]\}]$', param_value):
+                            pass
+                        else:
+                            params_dict.update({param_key: param_value})
+                storage.save()
+                new_instance.__dict__.update(params_dict)
+                print(new_instance.id)
+                storage.save()
+            else:
+                print("** class doesn't exist **")
+                return
 
     def help_create(self):
         """ Help information for the create method """
