@@ -39,15 +39,15 @@ class DBStorage:
             self.__session.commit()
 
     def all(self, cls=None):
-        if cls.__name__ is not None:
-            every = self.__session.query(cls.__name__).all()
 
-            # Make and return a dict like in FileStorage
-
-        else:
-            every = self.__session.query(Tables).all()
-
-            # Make and return a dict like in FileStorage
+        classes_list = [User, Place, State, City, Amenity, Review]
+        if cls is not None and cls in classes_list:
+            temp = {}
+            for key, val in DBStorage.__session.items():
+                if cls.__name__ in key:
+                    temp[key] = val
+                    return temp
+        return DBStorage.__object
 
     def new(self, obj):
         self.all().update(obj.to_dict())
@@ -57,7 +57,8 @@ class DBStorage:
 
     def delete(self, obj=None):
         if obj is not None:
-            del self.all[obj.name]
+            if obj.__name__:
+                del self.__session[obj.__name__]
 
     def reload(self):
         ''' Creates all database objects '''
