@@ -125,30 +125,27 @@ class HBNBCommand(cmd.Cmd):
             params_dict = {}
             params = args[1:]
             if class_name in HBNBCommand.classes:
-                try:
-                    new_instance = HBNBCommand.classes[class_name]()
-                    for param in params:
-                        param_key, param_value = param.split("=")
-                        if param_value.isdigit() or \
-                                re.match(r'-?\d+$', param_value):
-                            param_value = int(param_value)
-                            params_dict.update({param_key: param_value})
-                        elif re.search(r'-?\d+\.\d+', param_value):
-                            param_value = float(param_value)
-                            params_dict.update({param_key: param_value})
+                new_instance = HBNBCommand.classes[class_name]()
+                for param in params:
+                    param_key, param_value = param.split("=")
+                    if param_value.isdigit() or \
+                        re.match(r'-?\d+$', param_value):
+                        param_value = int(param_value)
+                        params_dict.update({param_key: param_value})
+                    elif re.search(r'-?\d+\.\d+', param_value):
+                        param_value = float(param_value)
+                        params_dict.update({param_key: param_value})
+                    else:
+                        param_value = re.sub('_', " ", param_value)
+                        param_value = param_value.strip('"\'')
+                        param_value = re.sub(r'"', '\\"', param_value)
+                        if re.match(r'^[\[\{].+[\]\}]$', param_value):
+                            pass
                         else:
-                            param_value = re.sub('_', " ", param_value)
-                            param_value = param_value.strip('"\'')
-                            param_value = re.sub(r'"', '\\"', param_value)
-                            if re.match(r'^[\[\{].+[\]\}]$', param_value):
-                                pass
-                            else:
-                                params_dict.update({param_key: param_value})
+                            params_dict.update({param_key: param_value})
                     new_instance.__dict__.update(params_dict)
                     print(new_instance.id)
                     new_instance.save()
-                except Exception:
-                    pass
             else:
                 print("** class doesn't exist **")
                 return
