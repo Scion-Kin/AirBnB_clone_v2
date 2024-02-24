@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
-from models.base_model import BaseModel, Base, Column, String
-from sqlalchemy.orm import relationship
-
 from models import FileStorage
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 
 class State(BaseModel, Base):
@@ -25,5 +25,3 @@ class State(BaseModel, Base):
             if value.state_id == self.id:
                 list_instances.append({key: value})
         return list_instances
-
-
