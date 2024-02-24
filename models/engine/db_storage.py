@@ -9,8 +9,8 @@ from models.user import User
 from models.amenity import Amenity
 from models.review import Review
 from models.place import Place
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 class DBStorage:
@@ -30,39 +30,47 @@ class DBStorage:
                                       pool_pre_ping=True)
 
         if (getenv('HBNB_ENV') == 'test'):
-            # Drop all tables if environment is a test one
-
-            all = self.__session.query(Tables).all()
-
-            del all
-
-            self.__session.commit()
+            # Drop all tables if environment is a test env
+            meta = Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-
+        """ qeury storage based on class """
         classes_list = [User, Place, State, City, Amenity, Review]
+        temp = {}
         if cls is not None and cls in classes_list:
-            temp = {}
-            for key, val in DBStorage.__session.items():
-                if cls.__name__ in key:
-                    temp[key] = val
-                    return temp
-        return DBStorage.__object
+            results = self.__session.query(cls).all()
+            for result in results:
+                """ we need to append the class name with the id, this
+                is because currently it is [Class] (id): {classObject}
+                """
+                key = "[{}] ({})".format(result.__class__.__name__, result.id)
+                value = result
+                temp.update({key: value})
+            return temp
+        else:
+            for clas in classes_list:
+                results = self.__session.query(clas).all()
+                if results is not None:
+                    for result in results:
+                        key = "[{}] ({})".format(result.__class__.__name__, result.id)
+                        value = result
+                        temp.update({key: value})
+            return temp
 
     def new(self, obj):
-        self.all().update(obj.to_dict())
+        self.__session.add(obj)
 
     def save(self):
         self.__session.commit()
 
     def delete(self, obj=None):
-        if obj is not None:
-            if obj.__name__:
-                del self.__session[obj.__name__]
+        if obj:
+            self.__session.delete(obj)
 
     def reload(self):
         ''' Creates all database objects '''
         Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(scoped_session, bind=self.__engine,
+        session = sessionmaker(bind=self.__engine,
                                expire_on_commit=False)
+        Session = scoped_session(session)
         self.__session = Session()
