@@ -52,7 +52,8 @@ class DBStorage:
                 results = self.__session.query(clas).all()
                 if results is not None:
                     for result in results:
-                        key = "[{}] ({})".format(result.__class__.__name__, result.id)
+                        key = "[{}] ({})".format(result.__class__.__name__,
+                                                 result.id)
                         value = result
                         temp.update({key: value})
             return temp
