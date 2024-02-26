@@ -16,9 +16,11 @@ class test_City(test_basemodel):
     def test_state_id(self):
         """ """
         new = self.value()
+        new.__dict__.update({'state_id': ''})
         self.assertEqual(type(new.state_id), str)
 
     def test_name(self):
         """ """
         new = self.value()
+        new.__dict__.update({'name': ''})
         self.assertEqual(type(new.name), str)
