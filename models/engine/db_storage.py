@@ -37,7 +37,9 @@ class DBStorage:
         """ qeury storage based on class """
         classes_list = [User, Place, State, City, Amenity, Review]
         temp = {}
-        if cls is not None and cls in classes_list:
+        if isinstance(cls, str):
+            return temp
+        elif cls is not None and cls in classes_list:
             results = self.__session.query(cls).all()
             for result in results:
                 """ we need to append the class name with the id, this
