@@ -2,7 +2,7 @@
 ''' This is a fabric file that deploys versions to remote servers'''
 
 from datetime import datetime
-from fabric import sudo, put
+from fabric import *
 import os
 
 
