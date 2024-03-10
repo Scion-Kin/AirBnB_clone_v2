@@ -2,6 +2,7 @@
 ''' This is a fabric file that sets up a tar archive '''
 
 from datetime import datetime
+from fabric import *
 
 
 def do_pack():
@@ -15,7 +16,7 @@ def do_pack():
     try:
         command = local('tar -cvzf {} web_static'.format(arch_file))
 
-    except ImportError:
-        pass
+    except Exception:
+        return None
 
     return 'versions/{}'.format(arch_file)
