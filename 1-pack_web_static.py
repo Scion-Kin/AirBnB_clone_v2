@@ -2,7 +2,7 @@
 ''' This is a fabric file that sets up a tar archive '''
 
 from datetime import datetime
-from fabric import *
+from fabric.api import *
 
 
 def do_pack():
