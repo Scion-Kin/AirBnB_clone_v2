@@ -47,3 +47,22 @@ def do_deploy(archive_path):
 
     else:
         return True
+
+
+def deploy():
+    ''' This function calls the previous methods for deployment '''
+    try:
+        arch_file = do_pack()
+
+        if arch_file is None:
+            return False
+
+        dep = do_deploy(arch_file)
+
+        if dep is False:
+            return False
+
+        return dep
+
+    except Exception:
+        return False
