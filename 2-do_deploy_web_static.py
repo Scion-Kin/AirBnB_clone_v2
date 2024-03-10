@@ -7,10 +7,9 @@ import os
 env.hosts = ['54.175.223.158', '52.91.131.105']
 env.usr = 'ubuntu'
 
+
 def do_deploy(archive_path):
     ''' Deploys a version to the web servers '''
-
-    
 
     if not os.path.exists(archive_path):
         return False
