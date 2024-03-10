@@ -31,18 +31,19 @@ def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         return False
 
-    unzipped = archive_path[0:-4]
-    co0 = put(archive_path, '/tmp/')
+    try:
+        unzipped = archive_path[0:-4]
+        put(archive_path, '/tmp/')
 
-    co1 = run('tar -xvzf /tmp/{} -C /data/web_static/releases/'.format(
-        archive_path))
+        run('tar -xvzf /tmp/{} -C /data/web_static/releases/'.format(
+            archive_path))
 
-    co2 = run('rm -r /tmp/{}'.format(archive_path))
+        run('rm -r /tmp/{}'.format(archive_path))
+        run('rm -r /data/web_static/current')
+        run('ln -s /data/web_static/releases/{}\
+                    /data/web_static/current'.format(unzipped))
 
-    co3 = run('ln -fs /data/web_static/releases/{}\
-                /data/web_static/current'.format(unzipped))
-
-    if co0.failed or co1.failed or co2.failed or co3.failed:
+    except Exception:
         return False
 
     else:
