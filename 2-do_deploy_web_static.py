@@ -2,7 +2,7 @@
 ''' This is a fabric file that deploys versions to remote servers'''
 
 from datetime import datetime
-from fabric.api import run, put, env
+from fabric.api import run, put, env, local
 import os
 
 env.hosts = ['54.175.223.158', '52.91.131.105']
