@@ -23,7 +23,7 @@ def do_deploy(archive_path):
     co2 = run('rm -r /tmp/{}'.format(archive_path))
 
     co4 = run('rm -r /data/web_static/current')
-    co4 = run('ln -s /data/web_static/current\
+    co4 = run('ln -fs /data/web_static/current\
                 /data/web_static/releases/{}'.format(unzipped))
 
     if co0.failed or co1.failed or co2.failed or co4.failed or co4.failed:
