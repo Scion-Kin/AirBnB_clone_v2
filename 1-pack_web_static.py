@@ -1,23 +1,22 @@
 #!/usr/bin/python3
-"""pack all content within web_static
-"""
-from fabric.api import local
+''' This is a fabric file that sets up a tar archive '''
+
 from datetime import datetime
+from fabric.api import local
 import os
 
 
 def do_pack():
-    """pack all content within web_static
-    into a .tgz archive
-    The archive will be put in versions/
-    """
-    if not os.path.exists("versions"):
-        local("mkdir versions")
+    ''' This function creates an archive and stores it in versions folder '''
+
+    if not os.path.exists('versions'):
+        local('mkdir versions')
+
     now = datetime.now()
-    name = "versions/web_static_{}.tgz".format(
+    arch_file = 'versions/web_static{}.tgz'.format(
         now.strftime("%Y%m%d%H%M%S")
     )
-    cmd = "tar -cvzf {} {}".format(name, "web_static")
-    result = local(cmd)
-    if not result.failed:
-        return name
+
+    command = local("tar -cvzf {} web_static".format(arch_file))
+    if not command.failed:
+        return arch_file
