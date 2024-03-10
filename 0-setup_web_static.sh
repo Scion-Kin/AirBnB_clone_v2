@@ -9,22 +9,10 @@ mkdir -p /data/web_static/shared/ /data/web_static/releases/test/
 
 echo "Holberton School" > /data/web_static/releases/test/index.html
 
-if [ -L /data/web_static/current ]; then
-    rm /data/web_static/current
-    # symbolic link removed if it exits
-fi
-
-ln -s /data/web_static/releases/test/ /data/web_static/current
+# symbolic link removed if it exits and create new
+ln -fs /data/web_static/releases/test/ /data/web_static/current
 
 chown -R ubuntu:ubuntu /data/
 
-conf=\
-"
-	location /hbnb_static/ {
-		alias /data/web_static/current/;
-	}
-"
-
-sed -i "47i$conf" /etc/nginx/sites-enabled/default
-
+sed -i '/^\tserver_name/ a\\tlocation /hbnb_static \{\n\t\talias /data/web_static/current;\n\t\}\n' /etc/nginx/sites-enabled/default
 service nginx restart
