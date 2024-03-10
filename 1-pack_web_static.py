@@ -5,6 +5,7 @@ from datetime import datetime
 from fabric.api import local
 import os
 
+
 def do_pack():
     ''' This function creates an archive and stores it in versions folder '''
 
