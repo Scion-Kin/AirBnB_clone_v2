@@ -17,10 +17,8 @@ def do_deploy(archive_path):
     co1 = sudo('tar -xvzf /tmp/{} -C /data/web_static/releases/'.format(
         archive_path))
 
-    # remove archive from server
     co2 = sudo('rm -r /tmp/{}'.format(archive_path))
 
-    # delete symlink, make new
     co4 = sudo('rm -r /data/web_static/current')
     co4 = sudo('ln -s /data/web_static/current\
                 /data/web_static/releases/')
