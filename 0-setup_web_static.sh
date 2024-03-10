@@ -10,7 +10,8 @@ mkdir -p /data/web_static/shared/ /data/web_static/releases/test/
 echo "Holberton School" > /data/web_static/releases/test/index.html
 
 # symbolic link removed if it exits and create new
-ln -fs /data/web_static/releases/test/ /data/web_static/current
+rm -r /data/web_static/current
+ln -s /data/web_static/releases/test/ /data/web_static/current
 
 chown -R ubuntu:ubuntu /data/
 
