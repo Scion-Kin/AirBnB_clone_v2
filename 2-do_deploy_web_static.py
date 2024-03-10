@@ -4,6 +4,7 @@
 from datetime import datetime
 from fabric.api import run, put, env
 import os
+
 env.hosts = ['54.175.223.158', '52.91.131.105']
 env.usr = 'ubuntu'
 
@@ -22,11 +23,10 @@ def do_deploy(archive_path):
 
     co2 = run('rm -r /tmp/{}'.format(archive_path))
 
-    co4 = run('rm -r /data/web_static/current')
-    co4 = run('ln -fs /data/web_static/current\
-                /data/web_static/releases/{}'.format(unzipped))
+    co3 = run('ln -fs /data/web_static/releases/{}\
+                /data/web_static/current'.format(unzipped))
 
-    if co0.failed or co1.failed or co2.failed or co4.failed or co4.failed:
+    if co0.failed or co1.failed or co2.failed or co3.failed:
         return False
 
     else:
