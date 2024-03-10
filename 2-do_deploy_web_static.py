@@ -2,7 +2,7 @@
 ''' This is a fabric file that deploys versions to remote servers'''
 
 from datetime import datetime
-from fabric.api import sudo, put, env
+from fabric.api import run, put, env
 import os
 
 
@@ -16,13 +16,13 @@ def do_deploy(archive_path):
 
     co0 = put(archive_path, '/tmp/')
 
-    co1 = sudo('tar -xvzf /tmp/{} -C /data/web_static/releases/'.format(
+    co1 = run('tar -xvzf /tmp/{} -C /data/web_static/releases/'.format(
         archive_path))
 
-    co2 = sudo('rm -r /tmp/{}'.format(archive_path))
+    co2 = run('rm -r /tmp/{}'.format(archive_path))
 
-    co4 = sudo('rm -r /data/web_static/current')
-    co4 = sudo('ln -s /data/web_static/current\
+    co4 = run('rm -r /data/web_static/current')
+    co4 = run('ln -s /data/web_static/current\
                 /data/web_static/releases/')
 
     if co0.failed or co1.failed or co2.failed or co4.failed or co4.failed:
