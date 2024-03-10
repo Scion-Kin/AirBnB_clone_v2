@@ -57,12 +57,7 @@ def deploy():
         if arch_file is None:
             return False
 
-        dep = do_deploy(arch_file)
-
-        if dep is False:
-            return False
-
-        return dep
+        return do_deploy(arch_file)
 
     except Exception:
         return False
