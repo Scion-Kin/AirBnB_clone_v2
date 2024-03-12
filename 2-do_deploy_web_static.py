@@ -35,10 +35,15 @@ def do_deploy(archive_path):
         unzipped = archive_path[0:-4]
         put(archive_path, '/tmp/')
 
-        run('tar -xvzf /tmp/{} -C /data/web_static/releases/'.format(
+        run("mkdir /data/web_static/releases/new && tar -xvzf\
+        /tmp/{} -C /data/web_static/releases/new/".format(
             archive_path))
 
-        run('rm -r /tmp/{}'.format(archive_path))
+        run("mv /data/web_static/releases/new/* /data/web_static/releases/{}"
+            .format(unzipped))
+
+        run('rm -r /tmp/{} && rm -r /data/web_static/releases/new/'
+            .format(archive_path))
         run('rm -r /data/web_static/current')
         run('ln -s /data/web_static/releases/{}\
                     /data/web_static/current'.format(unzipped))
