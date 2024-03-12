@@ -2,6 +2,7 @@
 ''' This is a fabric file that deploys versions to remote servers'''
 
 from datetime import datetime
+
 from fabric.api import run, put, env, local
 import os
 
@@ -32,21 +33,21 @@ def do_deploy(archive_path):
         return False
 
     try:
-        unzipped = archive_path[0:-4]
+        unzipped = archive_path[9:-4]
         put(archive_path, '/tmp/')
 
-        run("mkdir /data/web_static/releases/new && tar -xvzf\
-        /tmp/{} -C /data/web_static/releases/new/".format(
-            archive_path))
+        run("mkdir /data/web_static/releases/new")
+        run("tar -xzf /tmp/{} -C /data/web_static/releases/new/".format(
+            archive_path[9:]))
 
-        run("mv /data/web_static/releases/new/* /data/web_static/releases/{}"
-            .format(unzipped))
+        run("mv /data/web_static/releases/new/web_static\
+        /data/web_static/releases/{}".format(unzipped))
 
-        run('rm -r /tmp/{} && rm -r /data/web_static/releases/new/'
-            .format(archive_path))
+        run('rm -r /tmp/{}'.format(archive_path[9:]))
+        run('rm -r /data/web_static/releases/new/')
         run('rm -r /data/web_static/current')
         run('ln -s /data/web_static/releases/{}\
-                    /data/web_static/current'.format(unzipped))
+            /data/web_static/current'.format(unzipped))
 
     except Exception:
         return False
