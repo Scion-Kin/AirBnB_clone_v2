@@ -6,7 +6,6 @@ from fabric.api import run, put, env, local
 import os
 
 env.hosts = ['52.91.131.105', '52.91.146.189']
-env.usr = 'ubuntu'
 
 
 def do_pack():
@@ -56,13 +55,10 @@ def do_deploy(archive_path):
 
 def deploy():
     ''' This function calls the previous methods for deployment '''
-    try:
-        arch_file = do_pack()
 
-        if arch_file is None:
-            return False
+    arch_file = do_pack()
 
-        return do_deploy(arch_file)
-
-    except Exception:
+    if arch_file is None:
         return False
+
+    return do_deploy(arch_file)
