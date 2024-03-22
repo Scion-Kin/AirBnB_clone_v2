@@ -20,7 +20,7 @@ def hbnb():
 def c_is_fun(text):
 
     text = text.replace('_', ' ')
-    return '{}'.format(text)
+    return 'C {}'.format(text)
 
 
 if __name__ == '__main__':
