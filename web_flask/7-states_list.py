@@ -19,7 +19,7 @@ def close_storage(exception):
 @app.route('/states_list', strict_slashes=False)
 def storage():
 
-    return render_template('7-states_list.html', storage.all())
+    return render_template('7-states_list.html', li=storage.all())
 
 
 if __name__ == "__main__":
