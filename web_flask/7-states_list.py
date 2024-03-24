@@ -2,7 +2,7 @@
 ''' A Flask app to render storage engine data '''
 
 
-from ..models import storage
+from models import storage
 from flask import Flask, render_template
 
 
@@ -14,7 +14,7 @@ def close_storage(exception):
 
     storage.close()
 
-    
+
 @app.route('/states', strict_slashes=False)
 def storage():
 
