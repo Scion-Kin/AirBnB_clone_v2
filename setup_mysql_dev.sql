@@ -6,4 +6,3 @@ GRANT ALL PRIVILEGES on hbnb_dev_db.* to 'hbnb_dev'@'localhost' WITH GRANT OPTIO
 FLUSH PRIVILEGES;
 GRANT SELECT on performance_schema.* to 'hbnb_dev'@'localhost';
 FLUSH PRIVILEGES;
-
