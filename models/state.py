@@ -13,7 +13,7 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
     cities = relationship('City', backref="state", cascade="all, delete")
 
-    @property
+    '''@property
     def cities(self):
         """
         return city instances with state_id == city.id
@@ -21,8 +21,8 @@ class State(BaseModel, Base):
         from models.city import City
         local_storage = FileStorage()
         list_instances = []
-        results = local_storage.all('City')
+        results = local_storage.all(City)
         for key, value in results.items():
             if value.state_id == self.id:
                 list_instances.append({key: value})
-        return list_instances
+        return list_instances'''
