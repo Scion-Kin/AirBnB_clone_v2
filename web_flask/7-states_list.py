@@ -1,26 +1,29 @@
 #!/usr/bin/python3
-''' A Flask app to render storage engine data '''
+"""
+starts a Flask web application
+"""
 
+import sys, os
 
-from models import storage
-from models import *
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__name__), '..')))
+
 from flask import Flask, render_template
-
-
+from models import *
+from models import storage
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def close_storage(exception):
+@app.route('/states_list', strict_slashes=False)
+def states_list():
+    """display a HTML page with the states listed in alphabetical order"""
+    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
+    return render_template('7-states_list.html', states=states)
 
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    """closes the storage on teardown"""
     storage.close()
 
-
-@app.route('/states_list', strict_slashes=False)
-def storage():
-
-    return render_template('7-states_list.html', li=storage.all())
-
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port='5000')

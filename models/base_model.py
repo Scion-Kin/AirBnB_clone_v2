@@ -53,13 +53,12 @@ class BaseModel:
         dictionary.update({'__class__':
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
 
-        if self.created_at and self.created_at:
+        if self.created_at and self.updated_at:
             dictionary.update({'created_at': self.created_at.isoformat()})
-            dictionary.update({'updated_at': self.created_at.isoformat()})
+            dictionary.update({'updated_at': self.updated_at.isoformat()})
 
         else:
-            dictionary.update({'created_at': dt.utcnow()})
-            dictionary.update({'updated_at': dt.utcnow()})
+            self.__init__()
 
         if '_sa_instance_state' in dictionary:
             del dictionary['_sa_instance_state']
