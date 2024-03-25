@@ -3,9 +3,9 @@
 starts a Flask web application
 """
 
-import sys, os
+#import sys, os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__name__), '..')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__name__), '..')))
 
 from flask import Flask, render_template
 from models import *
@@ -26,4 +26,4 @@ def teardown_db(exception):
     storage.close()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0', debug=True)
