@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" starts a Flask web application """
+"""
+starts a Flask web application
+"""
 
 import sys
 import os
@@ -12,13 +14,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__name__), '..')))
 app = Flask(__name__)
 
 
-@app.route('/states_list', strict_slashes=False)
-def states_list():
-    """display a HTML page with the states listed in alphabetical order"""
+@app.route('/cities_by_states', strict_slashes=False)
+def cities_by_states():
+    """routes a page with the states listed in alphabetical order"""
     from models import storage
 
-    storage.close()
-    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
+    states = sorted(list(storage.all("State").values()))
     return render_template('7-states_list.html', states=states)
 
 
