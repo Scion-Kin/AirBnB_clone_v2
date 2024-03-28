@@ -4,9 +4,7 @@
         <TITLE>HBNB</TITLE>
     </HEAD>
     <BODY>
-        {% if not states %}
-        <H1>Not found!</H1>
-        {% else %}
+        {% if states %}
             {%- if cities %}
         <H1>State: {{ states.name }}</H1>
         <H3>Cities:</H3>
@@ -25,6 +23,8 @@
                 {% endfor %}
         </UL>
             {%- endif %}
+        {% else %}
+        <H1>Not found!</H1>
         {% endif %}
     </BODY>
 </HTML>
