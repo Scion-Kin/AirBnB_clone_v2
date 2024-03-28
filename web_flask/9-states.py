@@ -44,7 +44,7 @@ def state_by_id(id):
     cities = sorted(list(storage.all(City).values()), key=lambda x: x.name)
 
     return render_template('9-states.html',
-                           states=state, cities=cities)
+                           state=state, cities=cities)
 
 
 @app.teardown_appcontext
